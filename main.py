@@ -53,9 +53,14 @@ def Circulo(x,y,cor):
   DesenharPixel((x + 3), y + 1, cor)
   DesenharPixel(x, y + 3, cor)
   DesenharPixel((x - 2), y + 2, cor)
-  DesenharPixel((x - 3), y + 3,cor)
+  DesenharPixel((x - 1), y + 3,cor)
   DesenharPixel((x + 1), y + 3, cor)
-
+  DesenharPixel((x + 2), y + 2, cor)
+  DesenharPixel(x - 1 , y - 3 , cor)
+  DesenharPixel(x , y -3 , cor)
+  DesenharPixel(x + 1, y - 3 , cor)
+  DesenharPixel(x -2 , y - 2 , cor)
+  DesenharPixel(x + 2 , y - 2 , cor)
 CriarTemplate()
 
 #Bresenham(2,3,'#f00')
