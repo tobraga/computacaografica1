@@ -61,10 +61,17 @@ def Circulo(x,y,cor):
   DesenharPixel(x + 1, y - 3 , cor)
   DesenharPixel(x -2 , y - 2 , cor)
   DesenharPixel(x + 2 , y - 2 , cor)
+
+def Bezier():
+  DesenharPixel(x , y cor)
+
 CriarTemplate()
 
+
+
 #Bresenham(2,3,'#f00')
-Circulo(0,0,"#f25")
+#Circulo(0,0,"#f80")
+
 
 mainloop()
 
