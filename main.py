@@ -63,7 +63,7 @@ def Circulo(x,y,cor):
   DesenharPixel(x + 2 , y - 2 , cor)
 
 def Bezier():
-  DesenharPixel(x , y cor)
+  DesenharPixel(x , y ,cor)
 
 CriarTemplate()
 
