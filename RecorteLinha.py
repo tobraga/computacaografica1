@@ -34,44 +34,11 @@ def DesenharPixel(x, y, cor): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
 
-def Bresenham(x,y,cor):
-  countA = 0
-  countB = 0
-  for countA in range (8):
-    DesenharPixel(x, y, cor)
-    x += 1
-    countB +=  1
-    if countB%2 == 0:
-      y -= 1
+# --- ALG. RECORTE DE LINHA ---
 
-def Circulo(x,y,cor):
-  DesenharPixel((x - 3), y , cor)
-  DesenharPixel((x - 3), y - 1, cor)
-  DesenharPixel((x - 3), y + 1, cor)
-  DesenharPixel((x + 3), y , cor)
-  DesenharPixel((x + 3), y - 1, cor)
-  DesenharPixel((x + 3), y + 1, cor)
-  DesenharPixel(x, y + 3, cor)
-  DesenharPixel((x - 2), y + 2, cor)
-  DesenharPixel((x - 1), y + 3,cor)
-  DesenharPixel((x + 1), y + 3, cor)
-  DesenharPixel((x + 2), y + 2, cor)
-  DesenharPixel(x - 1 , y - 3 , cor)
-  DesenharPixel(x , y -3 , cor)
-  DesenharPixel(x + 1, y - 3 , cor)
-  DesenharPixel(x -2 , y - 2 , cor)
-  DesenharPixel(x + 2 , y - 2 , cor)
-
-def Bezier():
-  DesenharPixel(x , y ,cor)
-
-CriarTemplate()
 
 
 
-#Bresenham(2,3,'#f00')
-#Circulo(0,0,"#f80")
-
-
+CriarTemplate()
 mainloop()
 
