@@ -1,8 +1,9 @@
 import numpy as np
+import time
 from tkinter import *
 
 ## parametros iniciais
-tamanhoTela = 600
+tamanhoTela = 400
 tamanhoPixel = int(tamanhoTela / 50)
 
 ## criar o canvas utilizando o tkinter
@@ -141,6 +142,10 @@ def polilinhas():
   ptsX = []
   ptsY = []
 
+  # Vetores que armazenam os vértices como pontos críticos
+  ptscX = []
+  ptscY = []
+
   #vetores que armazenam os pontos rasterizados pelo alg de bresenham
   ptx = []
   pty = []
@@ -148,8 +153,10 @@ def polilinhas():
     print("ponto {}".format(i))
     x = int(input("x: "))
     ptsX.append(x)
+    ptscX.append(x)
     y = int(input("y: "))
     ptsY.append(y)
+    ptscY.append(y)
 
   for i in range(0,n-1):
     aux = bresenham(ptsX[i], ptsY[i], ptsX[i+1], ptsY[i+1])
@@ -158,7 +165,7 @@ def polilinhas():
     pts_y = aux[1]
     pty += pts_y
 
-  return[ptx, pty]
+  return[ptx, pty, ptscX, ptscY]
 
 polilinhas = polilinhas()
 ptsX = polilinhas[0]
@@ -180,28 +187,36 @@ def Varredura(ptsX, ptsY):
   tabelaPintados = np.delete(tabelaPintados,3,1)
   tabelaPintados = np.delete(tabelaPintados,2,1)
 
-  print ("Matrix sem ordenação\n", tabelaPintados)
 #Ordenação das tabelas
   ordenado1C = tabelaPintados[tabelaPintados[:,0].argsort()]
   ordenado2C = tabelaPintados[tabelaPintados[:,1].argsort()]
- # tabOrdenada = tabelaPintados[tabelaPintados[:,1].argsort()]
- # tabOrdenada = tabelaPintados[tabelaPintados[:,0].argsort(kind='mergesort')]
+
 
   tabOrd = tabelaPintados[np.lexsort((tabelaPintados[:,1], tabelaPintados[:,0]))]
   #print ("Matriz toda ordenada\n", tabOrdenada)
 
-  print ("Matriz com lexsort\n", tabOrd)
+  # Matriz ordenada com Lexsort
+  print ("Matriz ordenada\n Y  X", tabOrd)
 
 #Estas variáveis guardam uma cópia dos valores minimos e máximos
   yMax = ordenado1C[-1][0]
   yMin = ordenado1C[0][0]
-  xMax = ordenado2C[-1][1]
-  xMin = ordenado2C[0][-1]
-  print(xMax,xMin,yMax,yMin)
 
-#Linha de varredura
-#  for yMin in range(yMax):
+  print ("yMax:",yMax,"\nyMin",yMin)
+  #print(xMax,xMin,yMax,yMin)
 
+  # Variavel da linha de varredura
+  yVar = yMin + 1
+  #Linha de varredura
+  for yVar in range(yVar, yMax):
+    filtro = tabOrd[tabOrd[:,0]== yVar]
+    print (filtro)
+    xMax = filtro[-1][1]
+    xMin = filtro[0][-1]
+    print("Pintando linha ",yVar,"de Ponto x:",xMin," até Ponto x:",xMax)
+    for i in range(xMin+1,xMax):
+      time.sleep(0.1)
+      DesenharPixel(i,yVar, '#00ffff')
 
 Varredura(ptsX,ptsY)  
 
