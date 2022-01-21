@@ -1,2 +1,2 @@
 language = "bash"
-run = "python3 Varredura.py"
+run = "python3 FloodFill.py"
