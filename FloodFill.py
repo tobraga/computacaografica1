@@ -34,74 +34,160 @@ def DesenharPixel(x, y, cor): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
 
+def polilinhas():
+  def bresenham(x1, y1, x2, y2):
+  #vetor que guarda os pontos iniciais que irão ser aplicados no alg de Bresenham
+    ptIniciais = [x1, y1, x2, y2]
 
-from tkinter import *
-root = Tk()
-canvas = Canvas(root, width=250, height=250)
-canvas.pack()
+    print("\nPontos iniciais = ({},{}),({},{})\n".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
 
-canvas.create_text(125,20,text="FloodFill Demo",font="Helvetica 16 bold")
-canvas.create_text(125,40,text="left click = draw",font="Helvetica 12 italic")
-canvas.create_text(125,60,text="shift-left or right click = fill",font="Helvetica 12 italic")
+    #valores de delta para aplicarmos na condicação de teste da 1° octante
+    deltaX = x2-x1
+    deltaY = y2-y1
+    
+    #este vetor guardará os booleanos das trocas realizadas ou não na função de reflexão, para posteriormente fazer a reflexão para octante original.
+    #boolsTroca[0] = trocaxy
+    #boolsTroca[1] = trocax
+    #boolsTroca[2] = trocay
+    boolsTroca = [False, False, False]
 
-imgLeft = 75
-imgTop = 75
-imgWidth = 100
-imgHeight = 100
+    def reflexao(x1,y1,x2,y2):
+      if deltaX != 0:
+        m = deltaY/deltaX
+      else:
+        m = deltaY
 
-img = PhotoImage(width=imgWidth, height=imgHeight)
-canvas.create_image(imgLeft, imgTop, image=img, anchor=NW)
+      if m>1 or m<-1:
+        print("fazendo troca de x->y\n")
+        aux = 0
+        #trocando os valores do par (x1,y1)
+        aux = ptIniciais[0]
+        ptIniciais[0] = ptIniciais[1]
+        ptIniciais[1] = aux
 
-color1 = "#0000ff"
-color2 = "#00ff00"
-canvas.fillColor = color1
-for x in range(imgWidth):
-    for y in range(imgHeight):
-        img.put(color1, to=(x,y))
+        #trocando os valores do par (x2,y2)
+        aux = ptIniciais[2]
+        ptIniciais[2] = ptIniciais[3]
+        ptIniciais[3] = aux
+        boolsTroca[0] = True
+      if x1>x2:
+        print("fazendo reflexão em x1 e x2\n")
+        ptIniciais[0] = ptIniciais[0]*(-1)
+        ptIniciais[2] = ptIniciais[2]*(-1)
+        boolsTroca[1]= True
+      if y1>y2:
+        print("fazendo reflexão em y1 e y2\n")
+        ptIniciais[1] = ptIniciais[1]*(-1)
+        ptIniciais[3] = ptIniciais[3]*(-1)
+        boolsTroca[2] = True
 
-def inImage(x, y):
-    return ((x >= 0) and (x < imgWidth) and \
-            (y >= 0) and (y < imgHeight))
+    #verificando se os pontos estão na primeira condição, caso uma das condições seja satisfeita os pontos NÃO estão na primeira octante.
+    if deltaX < deltaY or deltaX<0 or deltaY<0:
+      reflexao(x1,y1,x2,y2)
+      print("Pontos Refletidos = ({},{}),({},{})".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
 
-def drawDot(x, y, color):
-    r = 5
-    for dx in range(-r,+r):
-        for dy in range(-r,+r):
-            if ((dx**2 + dy**2 <= r**2) and inImage(x+dx,y+dy)):
-                img.put(color, to=(x+dx,y+dy))
 
-def getColor(img, x, y):
-    hexColor = "#%02x%02x%02x" % getRGB(img, x, y)
-    return hexColor
+    def algoritmoB(ptIniciais):
+      x1 = ptIniciais[0]
+      y1 = ptIniciais[1]
+      x2 = ptIniciais[2]
+      y2 = ptIniciais[3]
 
-def getRGB(img, x, y):
-    value = img.get(x, y)
-    return tuple(map(int, value.split(" ")))
+      m = (y2-y1)/(x2-x1)
+      e = m - 0.5
 
-def mousePressed(event, doFlood):
-    x = event.x-imgLeft
-    y = event.y-imgTop
-    if (inImage(x,y)):
-        color = getColor(img, x, y)
-        if (color == color1):
-            canvas.fillColor = color2
+      #esta variável guarda uma cópia do valor de y1, para incrementá-lo.
+      aux = y1
+      aux2 = x1
+
+      #vetores que guardam os valores de y e x que foram calculados pelo alg de breseham 
+      ptsY = [y1]
+      ptsX = [x1]
+
+      for i in range(int(x1), int(x2)):
+        if e>0:
+          aux+=1
+          ptsY.append(aux)
+          e-=1
         else:
-            canvas.fillColor = color1
-        if (doFlood):
-           floodFillWithLargeStack(x, y)
-        else:
-           drawDot(x, y, canvas.fillColor)
+          ptsY.append(aux)
+        e=e+m
 
-def leftMousePressed(event):
-    shiftDown = ((event.state & 0x0001) == 1)
-    mousePressed(event, shiftDown)
+        aux2+=1
+        ptsX.append(aux2)
+      #boolsTroca[0] = trocaxy
+      #boolsTroca[1] = trocax
+      #boolsTroca[2] = trocay
+      if boolsTroca[0] == True:
+          aux = ptsX
+          ptsX = ptsY
+          ptsY = aux
+      if boolsTroca[1] == True:
+        for i in range(0, len(ptsY)):
+          ptsX[i] = ptsX[i]*-1
+      if boolsTroca[2] == True:
+        for i in range(0, len(ptsY)):
+          ptsY[i] = ptsY[i]*-1
+      return [ptsX, ptsY]
 
-def leftMouseMoved(event):
-    x = event.x-imgLeft
-    y = event.y-imgTop
-    if (inImage(x, y)):
-        drawDot(x, y, canvas.fillColor)
+    paresOrdenados = algoritmoB(ptIniciais)
 
+    return paresOrdenados
+
+  #---------------------------------------------
+  n = int(input("Digite o número de pontos: "))
+
+  #vetores que armazenam os vértices que ligam as polilinhas
+  ptsX = []
+  ptsY = []
+
+  # Vetores que armazenam os vértices como pontos críticos
+  ptscX = []
+  ptscY = []
+
+  #vetores que armazenam os pontos rasterizados pelo alg de bresenham
+  ptx = []
+  pty = []
+  for i in range(1,n+1):
+    print("ponto {}".format(i))
+    x = int(input("x: "))
+    ptsX.append(x)
+    ptscX.append(x)
+    y = int(input("y: "))
+    ptsY.append(y)
+    ptscY.append(y)
+
+  for i in range(0,n-1):
+    aux = bresenham(ptsX[i], ptsY[i], ptsX[i+1], ptsY[i+1])
+    pts_x = aux[0]
+    ptx += pts_x
+    pts_y = aux[1]
+    pty += pts_y
+
+  return[ptx, pty, ptscX, ptscY]
+
+polilinhas = polilinhas()
+ptsX = polilinhas[0]
+ptsY = polilinhas[1]
+
+for i in range(len(ptsX)):
+  master.update()
+  DesenharPixel(ptsX[i],ptsY[i], '#f00')
+  time.sleep(0.1)
+  
+color1 = '#f00'
+color2 = '#00ffff'
+
+def getColor(x, y):
+  x1,y1 = ConverterCoordenadas(x,y)
+    #Color = (x1, y2,tela.fill)
+    #return Color
+  tela.grid();
+  color = (tela.cget(x,y,"fill"))
+ # print(tela.cget(x1,y1,"fill"))
+  return color
+
+''' 
 def floodFill(x, y, color):
     if ((not inImage(x,y)) or (getColor(img, x, y) == color)):
         return
@@ -110,32 +196,25 @@ def floodFill(x, y, color):
     floodFill(x+1, y, color)
     floodFill(x, y-1, color)
     floodFill(x, y+1, color)
+''' 
 
-def callWithLargeStack(f,*args):
-    import sys
-    import threading
-    threading.stack_size(2**27)  # 64MB stack
-    sys.setrecursionlimit(2**27) # will hit 64MB stack limit first
-    # need new thread to get the redefined stack size
-    def wrappedFn(resultWrapper): resultWrapper[0] = f(*args)
-    resultWrapper = [None]
-    #thread = threading.Thread(target=f, args=args)
-    thread = threading.Thread(target=wrappedFn, args=[resultWrapper])
-    thread.start()
-    thread.join()
-    return resultWrapper[0]
+def FloodFill(x,y,color2,color1):
+  current = getColor(x,y)
+  if (current != color1 and current != color):
+    DesenharPixel(x,y,color2)
+    master.update()
+    FloodFill(x+1,y, color2, color1)
+    FloodFill(x,y+1, color2, color1)
+    FloodFill(x-1,y, color2, color1)
+    FloodFill(x,y-1, color2, color1)
 
-def floodFillWithLargeStack(x,y):
-    callWithLargeStack(floodFill, x, y, canvas.fillColor)
+def InputPoints():
+  x = int(input("ponto inicial x: "))
+    
+  y = int(input("ponto inicial y: "))
 
-def rightMousePressed(event):
-    mousePressed(event, True)
-
-canvas.bind("<Button-1>", leftMousePressed)
-canvas.bind("<B1-Motion>", leftMouseMoved)
-canvas.bind("<Button-3>", rightMousePressed)
-root.mainloop()
+  FloodFill(x,y,color2,color1)    
 
 CriarTemplate()
-
+InputPoints()
 mainloop()
