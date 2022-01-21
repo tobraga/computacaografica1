@@ -1,5 +1,6 @@
 import numpy as np
 import time
+from multiprocessing import Process
 from tkinter import *
 
 ## parametros iniciais
@@ -8,7 +9,7 @@ tamanhoPixel = int(tamanhoTela / 50)
 
 ## criar o canvas utilizando o tkinter
 master = Tk()
-tela = Canvas(master, background='white', width=tamanhoTela, height=tamanhoTela)
+tela = Canvas(master, background='#ffffff', width=tamanhoTela, height=tamanhoTela)
 tela.pack()
 
 ## função que cria a grade
@@ -30,9 +31,10 @@ def ConverterCoordenadas(x, y): # converter coordenadas para o sistema de grade
 
   return real_x, real_y
 
-def DesenharPixel(x, y, cor): # desenha um pixel na grade
+def DesenharPixel(x, y, cor,tipo): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
-  tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
+  id = tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor,tag=tipo)
+  #print(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
 
 def polilinhas():
   def bresenham(x1, y1, x2, y2):
@@ -183,9 +185,6 @@ def getPColor(x, y):
     # canvas use different coordinates than turtle
     x1,y1 = ConverterCoordenadas(x,y)
 
-    # get access to tkinter.Canvas
-    tela = turtle.getcanvas()
-    
     # find IDs of all objects in rectangle (x, y, x, y)
     ids = tela.find_overlapping(x1,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
 
@@ -195,14 +194,14 @@ def getPColor(x, y):
         index = ids[-1]
         
         # get its color
-        color = tela.itemcget(index, "fill")
+        color = tela.itemcget(index, "tag")
         
         # if it has color then return it
         if color:
             return color
 
     # if there was no object then return "white" - background color in turtle
-    return "white" # default color 
+    return "branco" # default color 
 
 ''' 
 def floodFill(x, y, color):
@@ -219,22 +218,35 @@ def FloodFill(x,y):
   color1 = '#f00'
   color2 = '#00ffff'
   current = getPColor(x,y)
-  if (current != color1 and current != color2):
+  if (current == 'borda'): #or current == branco):
+      pass
+  elif (current != 'borda'):
     print("Desenhando pontos")
-    DesenharPixel(x,y,color2)
+    DesenharPixel(x,y,color2,'dentro')
     master.update()
-    time.sleep(1)
+    time.sleep(0.5)
     FloodFill(x+1,y)
     FloodFill(x,y+1)
     FloodFill(x-1,y)
     FloodFill(x,y-1)
+  '''
+  p1 = Process(target =FloodFill(x+1,y) )
+  p1.start()
+  p2 = Process(target = FloodFill(x,y+1))
+  p2.start()
+  p3 = Process(target = FloodFill(x-1,y))
+  p3.start
+  p4 = Process(target = FloodFill(x,y-1))
+  '''
+
+
 
 def InputPoints():
   x = int(input("ponto inicial x: "))
     
   y = int(input("ponto inicial y: "))
-
-  FloodFill(x,y)    
+  
+      
 
 CriarTemplate()
 polilinhas = polilinhas()
@@ -243,7 +255,8 @@ ptsY = polilinhas[1]
 
 for i in range(len(ptsX)):
   master.update()
-  DesenharPixel(ptsX[i],ptsY[i], '#f00')
+  DesenharPixel(ptsX[i],ptsY[i], '#f00','borda')
   time.sleep(0.1)
 InputPoints()
+FloodFill(x,y)
 mainloop()
