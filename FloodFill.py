@@ -3,12 +3,12 @@ import time
 from tkinter import *
 
 ## parametros iniciais
-tamanhoTela = 400
+tamanhoTela = 350
 tamanhoPixel = int(tamanhoTela / 50)
 
 ## criar o canvas utilizando o tkinter
 master = Tk()
-tela = Canvas(master, width=tamanhoTela, height=tamanhoTela)
+tela = Canvas(master, background='white', width=tamanhoTela, height=tamanhoTela)
 tela.pack()
 
 ## função que cria a grade
@@ -166,26 +166,43 @@ def polilinhas():
 
   return[ptx, pty, ptscX, ptscY]
 
-polilinhas = polilinhas()
-ptsX = polilinhas[0]
-ptsY = polilinhas[1]
 
-for i in range(len(ptsX)):
-  master.update()
-  DesenharPixel(ptsX[i],ptsY[i], '#f00')
-  time.sleep(0.1)
   
-color1 = '#f00'
-color2 = '#00ffff'
+
 
 def getColor(x, y):
   x1,y1 = ConverterCoordenadas(x,y)
     #Color = (x1, y2,tela.fill)
     #return Color
-  tela.grid();
-  color = (tela.cget(x,y,"fill"))
+  #tela.grid();
+  color = (x1,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
  # print(tela.cget(x1,y1,"fill"))
   return color
+def getPColor(x, y):
+
+    # canvas use different coordinates than turtle
+    x1,y1 = ConverterCoordenadas(x,y)
+
+    # get access to tkinter.Canvas
+    tela = turtle.getcanvas()
+    
+    # find IDs of all objects in rectangle (x, y, x, y)
+    ids = tela.find_overlapping(x1,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
+
+    # if found objects
+    if ids: 
+        # get ID of last object (top most)
+        index = ids[-1]
+        
+        # get its color
+        color = tela.itemcget(index, "fill")
+        
+        # if it has color then return it
+        if color:
+            return color
+
+    # if there was no object then return "white" - background color in turtle
+    return "white" # default color 
 
 ''' 
 def floodFill(x, y, color):
@@ -198,23 +215,35 @@ def floodFill(x, y, color):
     floodFill(x, y+1, color)
 ''' 
 
-def FloodFill(x,y,color2,color1):
-  current = getColor(x,y)
-  if (current != color1 and current != color):
+def FloodFill(x,y):
+  color1 = '#f00'
+  color2 = '#00ffff'
+  current = getPColor(x,y)
+  if (current != color1 and current != color2):
+    print("Desenhando pontos")
     DesenharPixel(x,y,color2)
     master.update()
-    FloodFill(x+1,y, color2, color1)
-    FloodFill(x,y+1, color2, color1)
-    FloodFill(x-1,y, color2, color1)
-    FloodFill(x,y-1, color2, color1)
+    time.sleep(1)
+    FloodFill(x+1,y)
+    FloodFill(x,y+1)
+    FloodFill(x-1,y)
+    FloodFill(x,y-1)
 
 def InputPoints():
   x = int(input("ponto inicial x: "))
     
   y = int(input("ponto inicial y: "))
 
-  FloodFill(x,y,color2,color1)    
+  FloodFill(x,y)    
 
 CriarTemplate()
+polilinhas = polilinhas()
+ptsX = polilinhas[0]
+ptsY = polilinhas[1]
+
+for i in range(len(ptsX)):
+  master.update()
+  DesenharPixel(ptsX[i],ptsY[i], '#f00')
+  time.sleep(0.1)
 InputPoints()
 mainloop()
