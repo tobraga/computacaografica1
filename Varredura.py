@@ -172,7 +172,10 @@ ptsX = polilinhas[0]
 ptsY = polilinhas[1]
 
 for i in range(len(ptsX)):
+  master.update()
   DesenharPixel(ptsX[i],ptsY[i], '#f00')
+  time.sleep(0.1)
+  
 
 def Varredura(ptsX, ptsY):
 
@@ -217,9 +220,10 @@ def Varredura(ptsX, ptsY):
     for i in range(xMin+1,xMax):
       time.sleep(0.1)
       DesenharPixel(i,yVar, '#00ffff')
+      master.update()
 
-Varredura(ptsX,ptsY)  
+
 
 CriarTemplate()
-
+Varredura(ptsX,ptsY)  
 mainloop()
