@@ -6,7 +6,7 @@ from multiprocessing import Process
 from tkinter import *
 
 ## parametros iniciais
-tamanhoTela = 500
+tamanhoTela = 800
 tamanhoPixel = int(tamanhoTela / 50)
 
 ## criar o canvas utilizando o tkinter
@@ -33,10 +33,10 @@ def ConverterCoordenadas(x, y): # converter coordenadas para o sistema de grade
 
   return real_x, real_y
 
-def DesenharPixel(x, y, cor,tipo): # desenha um pixel na grade
+def DesenharPixel(x, y, cor,tipo,borda): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
-  ids = tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor,tag=tipo)
-  return ids
+  tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor,tag=tipo,outline=borda)
+  
   #print(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
 
 def polilinhas():
@@ -189,20 +189,22 @@ def getPColor(x, y):
     x1,y1 = ConverterCoordenadas(x,y)
 
     # find IDs of all objects in rectangle (x, y, x, y)
-    ids = tela.find_overlapping(x1,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
+    ids = tela.find_overlapping(x,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
     #color = tela.itemcget(ids, "fill")
 
     # if found objects
-    
+    '''
     if ids: 
         # get ID of last object (top most)
-        index = ids[-1]
+        index = ids[0]
         #tela.itemcget(ids, "image")
         # get its color
-        color = tela.itemcget(index, "fill")
-
+        color = tela.itemcget(index, "tag")
+    '''
     # if there was no object then return "white" - background color in turtle
-    
+    ids = ids[-1]
+    color = tela.itemcget(ids, "fill")
+    print("pontos ids:",ids)
     return color # default color 
 
 ''' 
@@ -215,46 +217,40 @@ def floodFill(x, y, color):
     floodFill(x, y-1, color)
     floodFill(x, y+1, color)
 ''' 
-i = 0
 def FloodFill(x,y,corNova,corBorda):
-  i = 0
-  print("Iteração ",i)
   print("Pontos :",x ,"|" ,y)
- # tag1 = 'borda'
-  #tag2 = 'dentro'
+  tag1 = 'borda'
+  tag2 = 'dentro'
+  padrao = '#f00'
   current = getPColor(x,y)
   print ("current:",current)
   #if (current != color2 and current !=color1):
-  if ((current == corNova) or (current == corBorda)):    
+  #if ((current != tag1 and current != tag2)):    
   #if(current == 'borda' or current == 'dentro'):
-    return
-  if (current):
-    DesenharPixel(x,y,corNova,'dentro')
-    print("Desenhando Pontos :",x ,"|" ,y)
-    print("id Tags:",tela.find_withtag('dentro'))
-    master.update()
-    current = ''
-    i += i  
-  p1 = Process(target =FloodFill(x+1,y,corNova,corBorda) )
-  p1.start()
-  p2 = Process(target = FloodFill(x,y+1,corNova,corBorda))
-  p2.start()
-  p3 = Process(target = FloodFill(x-1,y,corNova,corBorda))
-  p3.start
-  p4 = Process(target = FloodFill(x,y-1,corNova,corBorda))
-  '''
-  time.sleep(1)
-  FloodFill(x+1,y,corNova,corBorda)
-  time.sleep(1)
-  FloodFill(x,y+1,corNova,corBorda)
-  time.sleep(1)
-  FloodFill(x-1,y,corNova,corBorda)
-  time.sleep(1)
-  FloodFill(x,y-1,corNova,corBorda)
-  time.sleep(1)
-  print("fim do loop",i)  
+  #while (current != corBorda and current != corNova):
+  if (current != '#b31d72'):
+      DesenharPixel(x,y,'#15734d','dentro','#15734d')
+      print("Desenhando Pontos :",x ,"|" ,y)
+      print("id Tags:",tela.find_withtag('dentro'))
+      print("Todos ids:",tela.find_all())
+      master.update()
+      time.sleep(1)
+      print("FloodFill direita")
+      FloodFill(x+1,y,corNova,corBorda)
+      time.sleep(1)
+      print("FloodFill cima")
+      FloodFill(x,y+1,corNova,corBorda)
+      time.sleep(1)
+      print("FloodFill esquerda")
+      FloodFill(x-1,y,corNova,corBorda)
+      time.sleep(1)
+      print("FloodFill baixo")
+      FloodFill(x,y-1,corNova,corBorda)
+      time.sleep(1)
+  
+  print ("fim do loop")  
   print("Todos ids:",tela.find_all())
-  '''
+  
   '''
   p1 = Process(target =FloodFill(x+1,y) )
   p1.start()
@@ -275,7 +271,7 @@ ptsY = polilinhas[1]
 
 for i in range(len(ptsX)):
   master.update()
-  DesenharPixel(ptsX[i],ptsY[i], '#f00','borda')
+  DesenharPixel(ptsX[i],ptsY[i], '#b31d72','borda','#b31d72')
   time.sleep(0.1)
 #print("Todos ids:",tela.find_all())
 print("id Tags:",tela.find_withtag('borda'))
