@@ -1,8 +1,6 @@
 from turtle import color
 import numpy as np
 import time
-import sys
-from multiprocessing import Process
 from tkinter import *
 
 ## parametros iniciais
@@ -172,31 +170,18 @@ def polilinhas():
 
   return[ptx, pty, ptscX, ptscY]
 
-
-  
-
-
-def getColor(x, y):
-  x1,y1 = ConverterCoordenadas(x,y)
-    #Color = (x1, y2,tela.fill)
-    #return Color
-  #tela.grid();
-  color = (x1+1,y1-1, (x1 + tamanhoPixel)-1, (y1 - tamanhoPixel)-1)
- # print(tela.cget(x1,y1,"fill"))
-  return color
 def getPColor(x, y):
 
-    # canvas use different coordinates than turtle
+    # Converte as coordenadas para o sistema de grade
     x1,y1 = ConverterCoordenadas(x,y)
-    # find IDs of all objects in rectangle (x, y, x, y)
+    # Achar todos os ids do retangulo (x, y, x, y)
     ids = tela.find_overlapping(x1+5,y1-5, (x1 + tamanhoPixel)-5, (y1 - tamanhoPixel)+5)
-    #tela.create_rectangle(x1+5, y1-5, (x1 + tamanhoPixel)-5, (y1 - tamanhoPixel)+5, fill="yellow")
-    #color = tela.itemcget(ids, "fill")
+ 
 
-    # if found objects
+    # Se for encontrado objetos
     
     if ids: 
-        # get ID of last object (top most)
+        # Recebe ID do ultimo objeto (top most)
         index = ids[-1]
         #tela.itemcget(ids, "image")
         # get its color
@@ -206,39 +191,19 @@ def getPColor(x, y):
         print("ponto id:",index)
         print ("Pontos reais :",x1+2,"|",y1+2,"|", (x1 + tamanhoPixel)-2,"|", (y1 - tamanhoPixel)-2)
         return color
-    # if there was no object then return "white" - background color in turtle
-    '''
-    ids = ids[0]
-    color = tela.itemcget(ids, "fill")
-    print("pontos ids:",ids)
-    print ("Pontos reais :",x1+2,"|",y1+2,"|", (x1 + tamanhoPixel)-2,"|", (y1 - tamanhoPixel)-2)
-    '''
+    # Se não tiver nenhum ponto, retorna o padrão branco - background
+
     return '#808080' # default color 
 
-''' 
-def floodFill(x, y, color):
-    if ((not inImage(x,y)) or (getColor(img, x, y) == color)):
-        return
-    img.put(color, to=(x, y))
-    floodFill(x-1, y, color)
-    floodFill(x+1, y, color)
-    floodFill(x, y-1, color)
-    floodFill(x, y+1, color)
-''' 
 def FloodFill(x,y):
   print("Pontos :",x ,"|" ,y)
   padrao = '#f00'
   current = getPColor(x,y)
-  print ("current:",current)
-  #if (current != color2 and current !=color1):
-  #if ((current != tag1 and current != tag2)):    
-  #if(current == 'borda' or current == 'dentro'):
-  #while (current != corBorda and current != corNova):
+  print ("Cor atual:",current)
+
   if (current == '#808080' or current == padrao):
       DesenharPixel(x,y,'#15734d')
       print("Desenhando Pontos Lógicos:",x ,"|" ,y)
-      #print("id Tags:",tela.find_withtag('dentro'))
-     # print("Todos ids:",tela.find_all())
       master.update()
       time.sleep(0.5)
       print("FloodFill direita")
@@ -253,21 +218,6 @@ def FloodFill(x,y):
       print("FloodFill baixo")
       FloodFill(x,y-1)
       print ("fim do loop")    
-  
-    
-  #print("Todos ids:",tela.find_all())
-  
-  '''
-  p1 = Process(target =FloodFill(x+1,y) )
-  p1.start()
-  p2 = Process(target = FloodFill(x,y+1))
-  p2.start()
-  p3 = Process(target = FloodFill(x-1,y))
-  p3.start
-  p4 = Process(target = FloodFill(x,y-1))
-  '''
-
-
       
 
 CriarTemplate()
@@ -280,8 +230,6 @@ for i in range(len(ptsX)):
   DesenharPixel(ptsX[i],ptsY[i], '#b31d72')
   PixelCentro(ptsX[i],ptsY[i],"#fcf003")
   time.sleep(0.1)
-#print("Todos ids:",tela.find_all())
-#print("id Tags:",tela.find_withtag('borda'))
 
 x = int(input("ponto inicial x: "))  
 y = int(input("ponto inicial y: "))
