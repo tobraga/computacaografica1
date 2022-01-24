@@ -35,16 +35,15 @@ def DesenharPixel(x, y, cor): # desenha um pixel na grade
 
 #-------------------------------------------------------
 def algBezier():
-  #os vetores abaixo guardarão as coordenadas dos pontos de controle
-
+  # guardando as coordenadas dos pontos de controle
   coord_X = []
   coord_Y = []
 
-  #a variável n guardará o número de pontos de controle
-  n = int(input("Digite o número de pontos de controle(inclusos os pontos inicial e final): "))
+  #n -> número de pontos de controle
+  n = int(input("Quantidade de pontos de controle: "))
 
 
-  #dentro deste laço serão coletados as coordenadas dos pontos de controle, sendo o primeiro o ponto inicial e o último o ponto final
+  #coleta das coordenadas dos pontos de controle
   for i in range(0,n):
     print("ponto {}".format(i))
     x = int(input("x: "))
@@ -52,28 +51,31 @@ def algBezier():
     y = int(input("y: "))
     coord_Y.append(y)
 
-  #A função recursiva B, recebe como parametro uma lista (lista de de coordenadas), a 1° posição de um vetor, o n° de pontos e um instante t
-  def B(coorArr, i, n, t):
+  #i - primeira posicao do vetor
+  #n - numero de pontos
+  #t - momento
+  def b(coorArr, i, n, t):
     
       if n == 0:
           aux = coorArr[i]
           return aux
       else:
-        aux = B(coorArr, i, n-1, t) * (1-t) + B(coorArr, i+1, n-1, t) * t
+        aux = b(coorArr, i, n-1, t) * (1-t) + b(coorArr, i+1, n-1, t) * t
       
       return aux
         
-  #o algoritmo Bezier recebe como parametro o n° de pontos de controle
+  
   def Bezier(n):
-    #os vetores guardarão os pontos X e Y calculados.
+    #guardando os pontos X e Y calculados.
     ptsX = []
     ptsY = []
-    #usamos a biblioteca numpy para contagem de instantes de 0 até 1. O intervalo foi definido de 0 até 1.1 para que o 1 também fosse usado.
+
+    
     for t in np.arange(0, 1.1, 0.1):
-      x = B(coord_X, 0, n - 1, t)
-      #usamos o round(x,2) para definir quantas casas decimais terão nosso número, nesse caso, 2.
+      x = b(coord_X, 0, n - 1, t)
+      
       ptsX.append(round(x, 2))
-      y = B(coord_Y, 0, n - 1, t)
+      y = b(coord_Y, 0, n - 1, t)
       ptsY.append(round(y,2))
     return [ptsX, ptsY]
   pts = Bezier(n)
@@ -83,19 +85,16 @@ def algBezier():
 
 #--------------------------------------------------
 def bresenham(x1, y1, x2, y2):
-  #vetor que guarda os pontos iniciais que irão ser aplicados no alg de Bresenham
+  #pontos iniciais 
   ptIniciais = [x1, y1, x2, y2]
 
   print("\nPontos iniciais = ({},{}),({},{})\n".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
 
-  #valores de delta para aplicarmos na condicação de teste da 1° octante
+  #valores de delta
   deltaX = x2-x1
   deltaY = y2-y1
   
-  #este vetor guardará os booleanos das trocas realizadas ou não na função de reflexão, para posteriormente fazer a reflexão para octante original.
-  #boolsTroca[0] = trocaxy
-  #boolsTroca[1] = trocax
-  #boolsTroca[2] = trocay
+  #booleanos das trocas realizadas ou não na função de reflexão
   boolsTroca = [False, False, False]
 
   def reflexao(x1,y1,x2,y2):
@@ -107,12 +106,12 @@ def bresenham(x1, y1, x2, y2):
     if m>1 or m<-1:
       print("fazendo troca de x->y\n")
       aux = 0
-      #trocando os valores do par (x1,y1)
+      #trocando os valores
       aux = ptIniciais[0]
       ptIniciais[0] = ptIniciais[1]
       ptIniciais[1] = aux
 
-      #trocando os valores do par (x2,y2)
+      #trocando os valores
       aux = ptIniciais[2]
       ptIniciais[2] = ptIniciais[3]
       ptIniciais[3] = aux
@@ -128,7 +127,7 @@ def bresenham(x1, y1, x2, y2):
       ptIniciais[3] = ptIniciais[3]*(-1)
       boolsTroca[2] = True
 
-  #verificando se os pontos estão na primeira condição, caso uma das condições seja satisfeita os pontos NÃO estão na primeira octante.
+  #verificando se os pontos estão.
   if deltaX < deltaY or deltaX<0 or deltaY<0:
     reflexao(x1,y1,x2,y2)
     print("Pontos Refletidos = ({},{}),({},{})".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
@@ -143,11 +142,10 @@ def bresenham(x1, y1, x2, y2):
     m = (y2-y1)/(x2-x1)
     e = m - 0.5
 
-    #esta variável guarda uma cópia do valor de y1, para incrementá-lo.
+   #cópia do valor de y1
     aux = y1
     aux2 = x1
 
-    #vetores que guardam os valores de y e x que foram calculados pelo alg de breseham 
     ptsY = [y1]
     ptsX = [x1]
 
@@ -162,9 +160,7 @@ def bresenham(x1, y1, x2, y2):
       
       aux2+=1
       ptsX.append(aux2)
-    #boolsTroca[0] = trocaxy
-    #boolsTroca[1] = trocax
-    #boolsTroca[2] = trocay
+    
     if boolsTroca[0] == True:
         aux = ptsX
         ptsX = ptsY
@@ -181,31 +177,11 @@ def bresenham(x1, y1, x2, y2):
   
   return paresOrdenados
 
-#--------------------------------------------------------
-
 pixels = algBezier()
 pontosX = pixels[0]
 pontosY = pixels[1]
 
-'''
-#PRINTANDO COM BRESENHAM
-for i in range(0, len(pontosX)-1):
-  aux = bresenham(pontosX[i], pontosY[i], pontosX[i+1], pontosY[i+1])
-  aux_x = aux[0]
-  aux_y = aux[1]
-  for i in range(len(aux_x)):
-    DesenharPixel(aux_x[i],aux_y[i], '#f00')
-'''
-#PRINTANDO SEM BRESENHAM
 for i in range(len(pontosX)):
     DesenharPixel(pontosX[i],pontosY[i], '#f00')
 CriarTemplate()
 mainloop()
-
-'''
-pontos testes:
-p0 = (-10,-10)
-p1 = (-5,10)
-p2 = (5,10)
-p3 = (10, -10)
-'''

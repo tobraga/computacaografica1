@@ -9,6 +9,9 @@ master = Tk()
 tela = Canvas(master, width=tamanhoTela, height=tamanhoTela)
 tela.pack()
 
+
+
+
 ## função que cria a grade
 def CriarTemplate():
   aux = int(tamanhoTela / 2) + (tamanhoPixel / 2)
@@ -40,19 +43,16 @@ def bresenham():
   x2 = float(input("Digite o ponto x2: "))
   y2 = float(input("Digite o ponto y2: "))
 
-  #vetor que guarda os pontos iniciais que irão ser aplicados no alg de Bresenham
+  #pontos iniciais
   ptIniciais = [x1, y1, x2, y2]
 
   print("\nPontos iniciais = ({},{}),({},{})\n".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
 
-  #valores de delta para aplicarmos na condicação de teste da 1° octante
+  #valores de delta
   deltaX = x2-x1
   deltaY = y2-y1
   
-  #este vetor guardará os booleanos das trocas realizadas ou não na função de reflexão, para posteriormente fazer a reflexão para octante original.
-  #boolsTroca[0] = trocaxy
-  #boolsTroca[1] = trocax
-  #boolsTroca[2] = trocay
+
   boolsTroca = [False, False, False]
 
   def reflexao(x1,y1,x2,y2):
@@ -64,12 +64,12 @@ def bresenham():
     if m>1 or m<-1:
       print("fazendo troca de x->y\n")
       aux = 0
-      #trocando os valores do par (x1,y1)
+     
       aux = ptIniciais[0]
       ptIniciais[0] = ptIniciais[1]
       ptIniciais[1] = aux
 
-      #trocando os valores do par (x2,y2)
+    
       aux = ptIniciais[2]
       ptIniciais[2] = ptIniciais[3]
       ptIniciais[3] = aux
@@ -85,7 +85,7 @@ def bresenham():
       ptIniciais[3] = ptIniciais[3]*(-1)
       boolsTroca[2] = True
 
-  #verificando se os pontos estão na primeira condição, caso uma das condições seja satisfeita os pontos NÃO estão na primeira octante.
+ 
   if deltaX < deltaY or deltaX<0 or deltaY<0:
     reflexao(x1,y1,x2,y2)
     print("Pontos Refletidos = ({},{}),({},{})".format(ptIniciais[0], ptIniciais[1], ptIniciais[2], ptIniciais[3]))
@@ -100,11 +100,10 @@ def bresenham():
     m = (y2-y1)/(x2-x1)
     e = m - 0.5
 
-    #esta variável guarda uma cópia do valor de y1, para incrementá-lo.
+    #cópia do valor de y1
     aux = y1
     aux2 = x1
 
-    #vetores que guardam os valores de y e x que foram calculados pelo alg de breseham 
     ptsY = [y1]
     ptsX = [x1]
 
@@ -119,9 +118,7 @@ def bresenham():
       
       aux2+=1
       ptsX.append(aux2)
-    #boolsTroca[0] = trocaxy
-    #boolsTroca[1] = trocax
-    #boolsTroca[2] = trocay
+
     if boolsTroca[0] == True:
         aux = ptsX
         ptsX = ptsY
@@ -138,7 +135,7 @@ def bresenham():
   
   return paresOrdenados
 
-#a função bresenham retorna duas listas, uma com os pontos X e outra com os pontos Y: pixels = [ptsX, ptsY]
+
 pixels = bresenham()
 pontosX = pixels[0]
 pontosY = pixels[1]
@@ -148,10 +145,3 @@ for i in range(len(pontosX)):
 
 CriarTemplate()
 mainloop()
-
-'''
-#-------------------------------------#
-PONTOS TESTE - AULA GUSTAVO RESQUE:
-P1 = (0,3)
-P2 = (3,9)
-'''
