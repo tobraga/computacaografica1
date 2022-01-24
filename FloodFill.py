@@ -35,9 +35,12 @@ def DesenharPixel(x, y, cor): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
   print("pintando pontos reais: ",x1,"|", "|",y1,"|", x1 + tamanhoPixel, "|",y1 - tamanhoPixel)
+
+# Desenha um pixel menor no centro do pixel maior 
 def PixelCentro(x,y,cor):
   x1, y1 = ConverterCoordenadas(x, y)
   ids = tela.create_rectangle(x1+5, y1-5, (x1 + tamanhoPixel)-5, (y1 - tamanhoPixel)+5, fill=cor)
+
 def polilinhas():
   def bresenham(x1, y1, x2, y2):
   #vetor que guarda os pontos iniciais que irão ser aplicados no alg de Bresenham
@@ -183,10 +186,8 @@ def getPColor(x, y):
     if ids: 
         # Recebe ID do ultimo objeto (top most)
         index = ids[-1]
-        #tela.itemcget(ids, "image")
-        # get its color
-        #color = tela.itemcget(index, "tag")
-        #ids = ids[0]
+
+        # Recebe a cor do retângulo
         color = tela.itemcget(index, "fill")
         print("ponto id:",index)
         print ("Pontos reais :",x1+2,"|",y1+2,"|", (x1 + tamanhoPixel)-2,"|", (y1 - tamanhoPixel)-2)
@@ -197,13 +198,12 @@ def getPColor(x, y):
 
 def FloodFill(x,y):
   print("Pontos :",x ,"|" ,y)
-  padrao = '#f00'
   current = getPColor(x,y)
   print ("Cor atual:",current)
 
-  if (current == '#808080' or current == padrao):
+  if (current == '#808080' or current == '#f00'):
       DesenharPixel(x,y,'#15734d')
-      print("Desenhando Pontos Lógicos:",x ,"|" ,y)
+      print("Desenhando Pontos:",x ,"|" ,y)
       master.update()
       time.sleep(0.5)
       print("FloodFill direita")
