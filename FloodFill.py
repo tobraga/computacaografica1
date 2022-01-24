@@ -33,11 +33,13 @@ def ConverterCoordenadas(x, y): # converter coordenadas para o sistema de grade
 
   return real_x, real_y
 
-def DesenharPixel(x, y, cor,tipo,borda): # desenha um pixel na grade
+def DesenharPixel(x, y, cor): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
-  tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor,tag=tipo,outline=borda)
+  tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor)
   print("pintando pontos reais: ",x1,"|", "|",y1,"|", x1 + tamanhoPixel, "|",y1 - tamanhoPixel)
-
+def PixelCentro(x,y,cor):
+  x1, y1 = ConverterCoordenadas(x, y)
+  ids = tela.create_rectangle(x1+5, y1-5, (x1 + tamanhoPixel)-5, (y1 - tamanhoPixel)+5, fill=cor)
 def polilinhas():
   def bresenham(x1, y1, x2, y2):
   #vetor que guarda os pontos iniciais que irão ser aplicados no alg de Bresenham
@@ -187,24 +189,31 @@ def getPColor(x, y):
     # canvas use different coordinates than turtle
     x1,y1 = ConverterCoordenadas(x,y)
     # find IDs of all objects in rectangle (x, y, x, y)
-    ids = tela.find_overlapping(x1+1,y1+1, (x1 + tamanhoPixel)-1, (y1 - tamanhoPixel)-1)
+    ids = tela.find_overlapping(x1+5,y1-5, (x1 + tamanhoPixel)-5, (y1 - tamanhoPixel)+5)
+    #tela.create_rectangle(x1+5, y1-5, (x1 + tamanhoPixel)-5, (y1 - tamanhoPixel)+5, fill="yellow")
     #color = tela.itemcget(ids, "fill")
 
     # if found objects
-    '''
+    
     if ids: 
         # get ID of last object (top most)
-        index = ids[0]
+        index = ids[-1]
         #tela.itemcget(ids, "image")
         # get its color
-        color = tela.itemcget(index, "tag")
-    '''
+        #color = tela.itemcget(index, "tag")
+        #ids = ids[0]
+        color = tela.itemcget(index, "fill")
+        print("ponto id:",index)
+        print ("Pontos reais :",x1+2,"|",y1+2,"|", (x1 + tamanhoPixel)-2,"|", (y1 - tamanhoPixel)-2)
+        return color
     # if there was no object then return "white" - background color in turtle
-    ids = ids[-1]
+    '''
+    ids = ids[0]
     color = tela.itemcget(ids, "fill")
     print("pontos ids:",ids)
     print ("Pontos reais :",x1+2,"|",y1+2,"|", (x1 + tamanhoPixel)-2,"|", (y1 - tamanhoPixel)-2)
-    return color # default color 
+    '''
+    return '#808080' # default color 
 
 ''' 
 def floodFill(x, y, color):
@@ -216,7 +225,7 @@ def floodFill(x, y, color):
     floodFill(x, y-1, color)
     floodFill(x, y+1, color)
 ''' 
-def FloodFill(x,y,corNova,corBorda):
+def FloodFill(x,y):
   print("Pontos :",x ,"|" ,y)
   padrao = '#f00'
   current = getPColor(x,y)
@@ -226,23 +235,23 @@ def FloodFill(x,y,corNova,corBorda):
   #if(current == 'borda' or current == 'dentro'):
   #while (current != corBorda and current != corNova):
   if (current == '#808080' or current == padrao):
-      DesenharPixel(x,y,'#15734d','dentro','#808080')
+      DesenharPixel(x,y,'#15734d')
       print("Desenhando Pontos Lógicos:",x ,"|" ,y)
       #print("id Tags:",tela.find_withtag('dentro'))
      # print("Todos ids:",tela.find_all())
       master.update()
       time.sleep(0.5)
       print("FloodFill direita")
-      FloodFill(x+1,y,corNova,corBorda)
+      FloodFill(x+1,y)
       time.sleep(0.5)
       print("FloodFill cima")
-      FloodFill(x,y+1,corNova,corBorda)
+      FloodFill(x,y+1)
       time.sleep(0.5)
       print("FloodFill esquerda")
-      FloodFill(x-1,y,corNova,corBorda)
+      FloodFill(x-1,y)
       time.sleep(0.5)
       print("FloodFill baixo")
-      FloodFill(x,y-1,corNova,corBorda)
+      FloodFill(x,y-1)
       print ("fim do loop")    
   
     
@@ -268,13 +277,14 @@ ptsY = polilinhas[1]
 
 for i in range(len(ptsX)):
   master.update()
-  DesenharPixel(ptsX[i],ptsY[i], '#b31d72','borda','#808080')
+  DesenharPixel(ptsX[i],ptsY[i], '#b31d72')
+  PixelCentro(ptsX[i],ptsY[i],"#fcf003")
   time.sleep(0.1)
 #print("Todos ids:",tela.find_all())
 #print("id Tags:",tela.find_withtag('borda'))
 
 x = int(input("ponto inicial x: "))  
 y = int(input("ponto inicial y: "))
-FloodFill(x,y,'#00ffff','#f00')
+FloodFill(x,y)
 print ("Fim do algoritmo")
 mainloop()
