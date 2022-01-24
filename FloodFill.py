@@ -6,7 +6,7 @@ from multiprocessing import Process
 from tkinter import *
 
 ## parametros iniciais
-tamanhoTela = 800
+tamanhoTela = 450
 tamanhoPixel = int(tamanhoTela / 50)
 
 ## criar o canvas utilizando o tkinter
@@ -36,8 +36,7 @@ def ConverterCoordenadas(x, y): # converter coordenadas para o sistema de grade
 def DesenharPixel(x, y, cor,tipo,borda): # desenha um pixel na grade
   x1, y1 = ConverterCoordenadas(x, y)
   tela.create_rectangle(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel, fill=cor,tag=tipo,outline=borda)
-  
-  #print(x1, y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
+  print("pintando pontos reais: ",x1,"|", "|",y1,"|", x1 + tamanhoPixel, "|",y1 - tamanhoPixel)
 
 def polilinhas():
   def bresenham(x1, y1, x2, y2):
@@ -180,7 +179,7 @@ def getColor(x, y):
     #Color = (x1, y2,tela.fill)
     #return Color
   #tela.grid();
-  color = (x1,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
+  color = (x1+1,y1-1, (x1 + tamanhoPixel)-1, (y1 - tamanhoPixel)-1)
  # print(tela.cget(x1,y1,"fill"))
   return color
 def getPColor(x, y):
@@ -188,8 +187,10 @@ def getPColor(x, y):
     # canvas use different coordinates than turtle
     x1,y1 = ConverterCoordenadas(x,y)
 
+    x1 +=0.5
+    y1 +=0.5
     # find IDs of all objects in rectangle (x, y, x, y)
-    ids = tela.find_overlapping(x,y1, x1 + tamanhoPixel, y1 - tamanhoPixel)
+    ids = tela.find_overlapping(x1,y1, (x1 + tamanhoPixel), (y1 - tamanhoPixel))
     #color = tela.itemcget(ids, "fill")
 
     # if found objects
@@ -205,6 +206,7 @@ def getPColor(x, y):
     ids = ids[-1]
     color = tela.itemcget(ids, "fill")
     print("pontos ids:",ids)
+    print ("Pontos reais :",x1+2,"|",y1+2,"|", (x1 + tamanhoPixel)-2,"|", (y1 - tamanhoPixel)-2)
     return color # default color 
 
 ''' 
@@ -219,8 +221,6 @@ def floodFill(x, y, color):
 ''' 
 def FloodFill(x,y,corNova,corBorda):
   print("Pontos :",x ,"|" ,y)
-  tag1 = 'borda'
-  tag2 = 'dentro'
   padrao = '#f00'
   current = getPColor(x,y)
   print ("current:",current)
@@ -228,28 +228,28 @@ def FloodFill(x,y,corNova,corBorda):
   #if ((current != tag1 and current != tag2)):    
   #if(current == 'borda' or current == 'dentro'):
   #while (current != corBorda and current != corNova):
-  if (current != '#b31d72'):
+  if (current == '#808080' or current == padrao):
       DesenharPixel(x,y,'#15734d','dentro','#15734d')
-      print("Desenhando Pontos :",x ,"|" ,y)
-      print("id Tags:",tela.find_withtag('dentro'))
-      print("Todos ids:",tela.find_all())
+      print("Desenhando Pontos Lógicos:",x ,"|" ,y)
+      #print("id Tags:",tela.find_withtag('dentro'))
+     # print("Todos ids:",tela.find_all())
       master.update()
-      time.sleep(1)
+      time.sleep(0.5)
       print("FloodFill direita")
       FloodFill(x+1,y,corNova,corBorda)
-      time.sleep(1)
+      time.sleep(0.5)
       print("FloodFill cima")
       FloodFill(x,y+1,corNova,corBorda)
-      time.sleep(1)
+      time.sleep(0.5)
       print("FloodFill esquerda")
       FloodFill(x-1,y,corNova,corBorda)
-      time.sleep(1)
+      time.sleep(0.5)
       print("FloodFill baixo")
       FloodFill(x,y-1,corNova,corBorda)
-      time.sleep(1)
+      print ("fim do loop")    
   
-  print ("fim do loop")  
-  print("Todos ids:",tela.find_all())
+    
+  #print("Todos ids:",tela.find_all())
   
   '''
   p1 = Process(target =FloodFill(x+1,y) )
@@ -274,9 +274,10 @@ for i in range(len(ptsX)):
   DesenharPixel(ptsX[i],ptsY[i], '#b31d72','borda','#b31d72')
   time.sleep(0.1)
 #print("Todos ids:",tela.find_all())
-print("id Tags:",tela.find_withtag('borda'))
+#print("id Tags:",tela.find_withtag('borda'))
 
 x = int(input("ponto inicial x: "))  
 y = int(input("ponto inicial y: "))
 FloodFill(x,y,'#00ffff','#f00')
+print ("Fim do algoritmo")
 mainloop()
