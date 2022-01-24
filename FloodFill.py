@@ -186,11 +186,8 @@ def getPColor(x, y):
 
     # canvas use different coordinates than turtle
     x1,y1 = ConverterCoordenadas(x,y)
-
-    x1 +=0.5
-    y1 +=0.5
     # find IDs of all objects in rectangle (x, y, x, y)
-    ids = tela.find_overlapping(x1,y1, (x1 + tamanhoPixel), (y1 - tamanhoPixel))
+    ids = tela.find_overlapping(x1+1,y1+1, (x1 + tamanhoPixel)-1, (y1 - tamanhoPixel)-1)
     #color = tela.itemcget(ids, "fill")
 
     # if found objects
@@ -229,7 +226,7 @@ def FloodFill(x,y,corNova,corBorda):
   #if(current == 'borda' or current == 'dentro'):
   #while (current != corBorda and current != corNova):
   if (current == '#808080' or current == padrao):
-      DesenharPixel(x,y,'#15734d','dentro','#15734d')
+      DesenharPixel(x,y,'#15734d','dentro','#808080')
       print("Desenhando Pontos Lógicos:",x ,"|" ,y)
       #print("id Tags:",tela.find_withtag('dentro'))
      # print("Todos ids:",tela.find_all())
@@ -271,7 +268,7 @@ ptsY = polilinhas[1]
 
 for i in range(len(ptsX)):
   master.update()
-  DesenharPixel(ptsX[i],ptsY[i], '#b31d72','borda','#b31d72')
+  DesenharPixel(ptsX[i],ptsY[i], '#b31d72','borda','#808080')
   time.sleep(0.1)
 #print("Todos ids:",tela.find_all())
 #print("id Tags:",tela.find_withtag('borda'))
