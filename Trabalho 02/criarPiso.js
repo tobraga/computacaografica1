@@ -12,4 +12,5 @@ function CriarPiso(){
     scene.add(p);
     
     p.position.y = -3;
+    p.receiveShadow = true;
   }
