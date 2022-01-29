@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div id="container">
+    <canvas id="c"></canvas>
+    <div id="labels"></div>
+  </div>
+</body>
+</html>
+<script type="module">
+
+//import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.137.5-HJEdoVYPhjkiJWkt6XIa/mode=imports/optimized/three.js';
+import {OrbitControls} from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js";
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+document.body.appendChild(renderer.domElement);
+
+const controlador = new OrbitControls(camera, renderer.domElement);
+
+function CriarPiso(){
+    var g = new THREE.PlaneGeometry(25,25);
+    var t = loader.load('https://threejsfundamentals.org/threejs/resources/images/checker.png');
+    t.wrapS = THREE.RepeatWrapping;
+    t.wrapT = THREE.RepeatWrapping;
+    t.magFilter = THREE.NearestFilter;
+    t.repeat.set(12,12);
+    
+    var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
+    var p = new THREE.Mesh(g, ma);
+    p.rotation.x = Math.PI * -.5;
+    scene.add(p);
+    
+    p.position.y = -3;
+    p.receiveShadow = true;
+  }
+
+
+function animacao(){
+  requestAnimationFrame(animacao);
+  
+  
+  renderer.render(scene,camera);
+}
+
+animacao();
+renderer.render(scene,camera);
+
+
+
+</script>
+<style>
+html, body {
+   margin: 0;
+   height: 100%;
+}
+
+</style>
