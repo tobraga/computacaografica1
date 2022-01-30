@@ -3,20 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+      html, body {
+         margin: 0;
+         height: 100%;
+      }
+      
+      </style>
 </head>
 <body>
-  <div id="container">
-    <canvas id="c"></canvas>
-    <div id="labels"></div>
-  </div>
-</body>
-</html>
+
+
 <script type="module">
 
 //import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
 import * as THREE from 'https://cdn.skypack.dev/pin/three@v0.137.5-HJEdoVYPhjkiJWkt6XIa/mode=imports/optimized/three.js';
 import {OrbitControls} from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js";
-
+//import {OrbitControls} from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -26,11 +29,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
-const controlador = new OrbitControls(camera, renderer.domElement);
-
-function CriarPiso(){
+function CriarPisoMirante(){
     var g = new THREE.PlaneGeometry(25,25);
-    var t = loader.load('https://threejsfundamentals.org/threejs/resources/images/checker.png');
+    var t = loader.load('../assets/pisoMirante.jpg');
     t.wrapS = THREE.RepeatWrapping;
     t.wrapT = THREE.RepeatWrapping;
     t.magFilter = THREE.NearestFilter;
@@ -44,7 +45,8 @@ function CriarPiso(){
     p.position.y = -3;
     p.receiveShadow = true;
   }
-
+const loader = new THREE.TextureLoader();
+const controlador = new OrbitControls(camera, renderer.domElement);
 
 function animacao(){
   requestAnimationFrame(animacao);
@@ -53,16 +55,20 @@ function animacao(){
   renderer.render(scene,camera);
 }
 
-animacao();
-renderer.render(scene,camera);
 
+var light = new THREE.AmbientLight(new THREE.Color(0xFFFFFF),1);
+light.castShadow = true;
+//light.target.position.set(0,0,0);
+light.position.set(0,10,10);
+scene.add(light);
+//scene.add(light.target);
+
+
+CriarPisoMirante();
+animacao();
 
 
 </script>
-<style>
-html, body {
-   margin: 0;
-   height: 100%;
-}
+</body>
 
-</style>
+</html>
