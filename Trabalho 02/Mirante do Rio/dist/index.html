@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mirante do Rio-UFPA</title>
+    <style>
+      html, body {
+         margin: 0;
+         height: 100%;
+      }
+      
+      </style>
+</head>
+<body>
+  <script src="../js/three.js"></script>
+  <script type="module">
+import {OrbitControls} from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js";
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+const renderer = new THREE.WebGLRenderer();
+
+renderer.shadowMap.enabled = true;
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+document.body.appendChild(renderer.domElement);
+
+function CriarPiso(){
+  var g = new THREE.PlaneGeometry(40,40);
+  var t = loader.load('../assets/pisoMirante.jpg');
+  t.wrapS = THREE.RepeatWrapping;
+  t.wrapT = THREE.RepeatWrapping;
+  t.magFilter = THREE.NearestFilter;
+  t.repeat.set(12,12);
+  
+  var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
+  var p = new THREE.Mesh(g, ma);
+  p.rotation.x = Math.PI * -.5;
+  scene.add(p);
+  
+  p.position.y = 0;
+  p.receiveShadow = true;
+}
+function CriarGramado(){
+  var g = new THREE.PlaneGeometry(75,75);
+  var t = loader.load('../assets/grama.jpg');
+  t.wrapS = THREE.RepeatWrapping;
+  t.wrapT = THREE.RepeatWrapping;
+  t.magFilter = THREE.NearestFilter;
+  t.repeat.set(12,12);
+  
+  var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
+  var p = new THREE.Mesh(g, ma);
+  p.rotation.x = Math.PI * -.5;
+  scene.add(p);
+  
+  p.position.y = -1;
+  p.receiveShadow = true;
+}
+const controlador = new OrbitControls(camera, renderer.domElement);
+const loader = new THREE.TextureLoader();
+
+// Cubo central do Prédio
+var geometria = new THREE.BoxGeometry(30,50,30);
+var material = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
+
+var cubo = new THREE.Mesh(geometria, material);
+cubo.receiveShadow = true;
+scene.add(cubo);
+
+cubo.position.y = 25;
+camera.position.x = 30;
+camera.position.z = 100;
+camera.position.y = 100;
+
+
+
+
+function animacao(){
+  requestAnimationFrame(animacao);
+  
+  renderer.render(scene,camera);
+}
+
+//var light = new THREE.AmbientLight(new THREE.Color(0xFFFFFF), 1);
+//var light = new THREE.DirectionalLight(new THREE.Color(0xFFFFFF), 1);
+var light = new THREE.SpotLight(new THREE.Color(0xFFFFFF), 1);
+
+
+light.castShadow = true;
+light.target.position.set(0,0,0);
+light.position.set(30,100,10);
+scene.add(light);
+scene.add(light.target);
+
+/*
+light.shadow.camera.zoom = 0.1;
+light.shadow.mapSize.width = 2048;
+light.shadow.mapSize.height = 2048;
+*/
+//light.shadow.mapSize.width = 1024;
+//light.shadow.mapSize.height = 1024;
+scene.add(light);
+var ajudante = new THREE.PointLightHelper(light);
+scene.add(ajudante);
+
+var ajudante2 = new THREE.CameraHelper(light.shadow.camera);
+scene.add(ajudante2);
+
+CriarGramado();
+CriarPiso();
+animacao();
+
+
+  </script>
+</body>
+
+</html>
