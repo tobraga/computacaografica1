@@ -16,26 +16,56 @@
   <script type="module">
 import {OrbitControls} from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/GLTFLoader.js";
+import { OBJLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/OBJLoader.js";
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
+
+const gltfloader = new GLTFLoader();
+
+const objLoader = new OBJLoader();
+
+gltfloader.load('../assets/giant_low_poly_tree/scene.gltf',
+ function (gltf) {
+  const root = gltf.scene;
+  root.traverse(function(model) {
+            if(model.isMesh){
+                model.castShadow = true;
+                model.receiveShadow = true;
+            }
+        })
+
+        root.position.set(-0.9,1.6,2.7)
+        star = root
+
+        scene.add( root );
+
+    },
+    // called while loading is progressing
+    function ( xhr ) {
+
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+    },
+    // called when loading has errors
+    function ( error ) {
+
+        console.log( 'An error happened' );
+
+    }
+);
+
+
 /*
-const loader = new GLTFLoader();
-*/
-function Arvore(){
-loader.load( '../assets/low poly tree.obj', function ( gltf ) {
-
-	scene.add( gltf.scene );
-
-}, undefined, function ( error ) {
-
-	console.error( error );
-
-} );
-}
-// */
+function Tree2(){
+  objLoader.load('../assets/Tree low.obj',(root) => {
+    scene.add(root);
+  });
+	// called when resource is loaded
+// 
+}*/
 renderer.shadowMap.enabled = true;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -75,6 +105,7 @@ function CriarPista(){
   pista.receiveShadow = true;
 }
 const controlador = new OrbitControls(camera, renderer.domElement);
+controlador.enableDamping = true
 const loader = new THREE.TextureLoader();
 
 // Cubo central do Prédio
@@ -93,10 +124,17 @@ camera.position.y = 100;
 
 
 
-function animacao(){
-  requestAnimationFrame(animacao);
+const animacao = () => 
+{
+  if(star){
+        star.rotateY(0.0174533)
+    }
   
+
+  controlador.update();
   renderer.render(scene,camera);
+  
+  window.requestAnimationFrame(animacao);
 }
 
 //var light = new THREE.AmbientLight(new THREE.Color(0xFFFFFF), 1);
@@ -126,7 +164,8 @@ scene.add(ajudante2);
 
 CriarPista();
 CriarPiso();
-Arvore();
+//Arvore();
+//Tree2();
 animacao();
 
 
