@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Copa Pistão</title>
+    <title>Praça js</title>
     <style>
       html, body {
          margin: 0;
@@ -15,12 +15,27 @@
   <script src="../js/three.js"></script>
   <script type="module">
 import {OrbitControls} from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/GLTFLoader.js";
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
+/*
+const loader = new GLTFLoader();
+*/
+function Arvore(){
+loader.load( '../assets/low poly tree.obj', function ( gltf ) {
 
+	scene.add( gltf.scene );
+
+}, undefined, function ( error ) {
+
+	console.error( error );
+
+} );
+}
+// */
 renderer.shadowMap.enabled = true;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -28,8 +43,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 function CriarPiso(){
-  var g = new THREE.PlaneGeometry(40,40);
-  var t = loader.load('../assets/pisoMirante.jpg');
+  var g = new THREE.PlaneGeometry(50,50);
+  var t = loader.load('../assets/grama.jpg');
   t.wrapS = THREE.RepeatWrapping;
   t.wrapT = THREE.RepeatWrapping;
   t.magFilter = THREE.NearestFilter;
@@ -44,19 +59,19 @@ function CriarPiso(){
   p.receiveShadow = true;
 }
 function CriarPista(){
-  var geometria = new THREE.CircleGeometry(26,128);
+  var geometria = new THREE.CircleGeometry(10,128);
   //var t = loader.load('../assets/street+asphalt-1024x1024.png');
   //t.wrapS = THREE.RepeatWrapping;
   //t.wrapT = THREE.RepeatWrapping;
   //t.magFilter = THREE.NearestFilter;
   //t.repeat.set(12,12);
   
-  var material = new THREE.MeshToonMaterial({color: 0xFAFAFA5});
+  var material = new THREE.MeshToonMaterial({color: 0x9E5020});
   var pista = new THREE.Mesh(geometria, material);
   pista.rotation.x = Math.PI * -.5;
   scene.add(pista);
   
-  pista.position.y = -1;
+  pista.position.y = 1;
   pista.receiveShadow = true;
 }
 const controlador = new OrbitControls(camera, renderer.domElement);
@@ -110,7 +125,8 @@ var ajudante2 = new THREE.CameraHelper(light.shadow.camera);
 scene.add(ajudante2);
 
 CriarPista();
-//CriarPiso();
+CriarPiso();
+Arvore();
 animacao();
 
 
