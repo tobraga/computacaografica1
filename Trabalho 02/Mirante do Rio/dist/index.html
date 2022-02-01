@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mirante do Rio-UFPA</title>
+    <title>Copa Pistão</title>
     <style>
       html, body {
          margin: 0;
@@ -43,21 +43,21 @@ function CriarPiso(){
   p.position.y = 0;
   p.receiveShadow = true;
 }
-function CriarGramado(){
-  var g = new THREE.PlaneGeometry(75,75);
-  var t = loader.load('../assets/grama.jpg');
-  t.wrapS = THREE.RepeatWrapping;
-  t.wrapT = THREE.RepeatWrapping;
-  t.magFilter = THREE.NearestFilter;
-  t.repeat.set(12,12);
+function CriarPista(){
+  var geometria = new THREE.CircleGeometry(26,128);
+  //var t = loader.load('../assets/street+asphalt-1024x1024.png');
+  //t.wrapS = THREE.RepeatWrapping;
+  //t.wrapT = THREE.RepeatWrapping;
+  //t.magFilter = THREE.NearestFilter;
+  //t.repeat.set(12,12);
   
-  var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
-  var p = new THREE.Mesh(g, ma);
-  p.rotation.x = Math.PI * -.5;
-  scene.add(p);
+  var material = new THREE.MeshToonMaterial({color: 0xFAFAFA5});
+  var pista = new THREE.Mesh(geometria, material);
+  pista.rotation.x = Math.PI * -.5;
+  scene.add(pista);
   
-  p.position.y = -1;
-  p.receiveShadow = true;
+  pista.position.y = -1;
+  pista.receiveShadow = true;
 }
 const controlador = new OrbitControls(camera, renderer.domElement);
 const loader = new THREE.TextureLoader();
@@ -68,7 +68,7 @@ var material = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
 
 var cubo = new THREE.Mesh(geometria, material);
 cubo.receiveShadow = true;
-scene.add(cubo);
+//scene.add(cubo);
 
 cubo.position.y = 25;
 camera.position.x = 30;
@@ -109,8 +109,8 @@ scene.add(ajudante);
 var ajudante2 = new THREE.CameraHelper(light.shadow.camera);
 scene.add(ajudante2);
 
-CriarGramado();
-CriarPiso();
+CriarPista();
+//CriarPiso();
 animacao();
 
 
