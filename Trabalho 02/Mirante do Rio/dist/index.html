@@ -39,6 +39,8 @@ const textureLoader = new THREE.TextureLoader();
 const renderer = new THREE.WebGLRenderer({antialias:true});
 //renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 document.body.appendChild(renderer.domElement);
 
 // Controlador de camera
@@ -55,22 +57,57 @@ const gltfLoader = new THREE.GLTFLoader();
 // Luzes
 
 // Luz ambiente para todo cenário
-var hLight = new THREE.AmbientLight(new THREE.Color(0xFFFFFF), 1);
-scene.add(hLight);
+//var hLight = new THREE.AmbientLight(new THREE.Color(0xFFFFFF), 1);
+//scene.add(hLight);
 // Luz Direcional
-var directionalLight = new THREE.DirectionalLight(new THREE.Color(0xFFFFFF), 1);
+//var directionalLight = new THREE.DirectionalLight(new THREE.Color(0xFFFFFF), 1);
 
 // Luz de ponto
+/*
 var spotLight = new THREE.SpotLight(new THREE.Color(0xFFFFFF), 1);
-
-// Luzes dos postes
-var pointLight = new THREE.PointLight(0xc4c4c4,10);
-
 spotLight.castShadow = true;
 spotLight.target.position.set(0,0,0);
-spotLight.position.set(30,100,10);
+spotLight.position.set(50,30,10);
 scene.add(spotLight);
 scene.add(spotLight.target);
+spotLight.shadow.camera.zoom = 0.1;
+spotLight.shadow.mapSize.width = 2048;
+spotLight.shadow.mapSize.height = 2048;
+
+
+var ajudante3 = new THREE.PointLightHelper(spotLight);
+scene.add(ajudante3);
+
+var ajudante4 = new THREE.CameraHelper(spotLight.shadow.camera);
+scene.add(ajudante4);
+*/
+// Luzes dos postes
+const pointLight1 = new THREE.PointLight(0xf5d784,1,1000);
+pointLight1.castShadow = true;
+pointLight1.position.set(2.3,16,0);
+scene.add(pointLight1);
+
+
+const pointLight2 = new THREE.PointLight(0xf5d784,1,1000);
+pointLight2.castShadow = true;
+pointLight2.position.set(-2.3,16,0);
+scene.add(pointLight2);
+
+
+
+//Set up shadow properties for the light
+pointLight1.shadow.mapSize.width = 512; // default
+pointLight1.shadow.mapSize.height = 512; // default
+pointLight1.shadow.camera.near = 0.5; // default
+pointLight1.shadow.camera.far = 10; // default
+pointLight1.shadow.focus = 1; // default
+
+//Set up shadow properties for the light
+pointLight2.shadow.mapSize.width = 512; // default
+pointLight2.shadow.mapSize.height = 512; // default
+pointLight2.shadow.camera.near = 0.5; // default
+pointLight2.shadow.camera.far = 10; // default
+pointLight2.shadow.focus = 1; // default
 
 /*
 light.shadow.camera.zoom = 0.1;
@@ -82,20 +119,24 @@ light.shadow.mapSize.height = 2048;
 //scene.add(light);
 
 // Ajudante de Luzes
-var ajudante = new THREE.PointLightHelper(spotLight);
+var ajudante = new THREE.PointLightHelper(pointLight1);
 scene.add(ajudante);
 
-var ajudante2 = new THREE.CameraHelper(spotLight.shadow.camera);
+var ajudante2 = new THREE.PointLightHelper(pointLight2);
 scene.add(ajudante2);
+
+
+//var ajudante3 = new THREE.CameraHelper(spotLight.shadow.camera);
+//scene.add(ajudante2);
 
 // Ajudante de direção x,y,z
 const axesHelper = new THREE.AxesHelper( 70);
 scene.add( axesHelper );
 
 // Funções
-
+function init(){
 // Grama
-function CriarGrama(){
+//function CriarGrama(){
   var g = new THREE.PlaneGeometry(50,50);
   var t = textureLoader.load('../assets/grama.jpg');
   t.wrapS = THREE.RepeatWrapping;
@@ -109,11 +150,12 @@ function CriarGrama(){
   scene.add(p);
   
   p.position.y = 0;
+  
   p.receiveShadow = true;
-}
+//}
 
 //Circulo Central
-function CriarCentro(){
+//function CriarCentro(){
   var geometria = new THREE.CircleGeometry(10,128);
   //var t = loader.load('../assets/street+asphalt-1024x1024.png');
   //t.wrapS = THREE.RepeatWrapping;
@@ -127,16 +169,23 @@ function CriarCentro(){
   scene.add(pista);
   
   pista.position.y = 0.1;
+  
   pista.receiveShadow = true;
-}
+//}
 
 // Load de Arvore 3d
-function Arvore1(){
+//function Arvore1(){
   gltfLoader.load('/assets/giant_low_poly_tree/scene.gltf', function(gltf){
   var tree = gltf.scene.children[0];
   tree.position.set(20,0.1,20);
   tree.scale.set(0.5,0.5,0.5);
   scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
   gltf.animations; // Array<THREE.AnimationClip>
 	gltf.scene; // THREE.Group
 	gltf.scenes; // Array<THREE.Group>
@@ -145,13 +194,20 @@ function Arvore1(){
   //renderer.render(scene,camera);
   //animacao();
 });
-}
-function Arvore2(){
+
+//}
+//function Arvore2(){
   gltfLoader.load('/assets/giant_low_poly_tree/scene.gltf', function(gltf){
   var tree = gltf.scene.children[0];
   tree.position.set(-10,0.1,-20);
   tree.scale.set(0.5,0.5,0.5);
   scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
   gltf.animations; // Array<THREE.AnimationClip>
 	gltf.scene; // THREE.Group
 	gltf.scenes; // Array<THREE.Group>
@@ -160,13 +216,20 @@ function Arvore2(){
   //renderer.render(scene,camera);
   //animacao();
 });
-}
-function Banco1(){
+//}
+//function Banco1(){
   gltfLoader.load('/assets/classic_park_bench_low_poly/scene.gltf', function(gltf){
   var banco = gltf.scene.children[0];
   banco.position.set(2,2.5,-10);
   banco.scale.set(5,5,5);
+  banco.receiveShadow = true;
   scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
   gltf.animations; // Array<THREE.AnimationClip>
 	gltf.scene; // THREE.Group
 	gltf.scenes; // Array<THREE.Group>
@@ -175,14 +238,21 @@ function Banco1(){
   //renderer.render(scene,camera);
   //animacao();
 });
-}
-function Banco2(){
+//}
+//function Banco2(){
   gltfLoader.load('/assets/classic_park_bench_low_poly/scene.gltf', function(gltf){
   var banco = gltf.scene.children[0];
   banco.position.set(2,2.5,10);
   banco.rotation.z = 3.14159;
   banco.scale.set(5,5,5);
+  banco.receiveShadow = true;
   scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
   gltf.animations; // Array<THREE.AnimationClip>
 	gltf.scene; // THREE.Group
 	gltf.scenes; // Array<THREE.Group>
@@ -191,13 +261,19 @@ function Banco2(){
   //renderer.render(scene,camera);
   //animacao();
 });
-}
-function Poste(){
+//}
+//function Poste(){
   gltfLoader.load('/assets/lamp_post/scene.gltf', function(gltf){
   var tree = gltf.scene.children[0];
   tree.position.set(0,0,0);
   tree.scale.set(0.2,0.2,0.2);
   scene.add(gltf.scene);
+  /*gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });*/
   gltf.animations; // Array<THREE.AnimationClip>
 	gltf.scene; // THREE.Group
 	gltf.scenes; // Array<THREE.Group>
@@ -206,16 +282,69 @@ function Poste(){
   //renderer.render(scene,camera);
   //animacao();
 });
-}
+//}
+// Load de Arvore 3d
+//function Doguinho(){
+  gltfLoader.load('/assets/playful_dog/scene.gltf', function(gltf){
+    if ( gltf.isMesh ) {
 
+gltf.castShadow = true;
+gltf.receiveShadow = true;
+
+}
+  var dog = gltf.scene.children[0];
+  dog.position.set(10,0.1,0);
+  dog.scale.set(5,5,5);
+  scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
+  gltf.receiveShadow =true;
+  gltf.castShadow =true;
+  gltf.animations; // Array<THREE.AnimationClip>
+	gltf.scene; // THREE.Group
+	gltf.scenes; // Array<THREE.Group>
+	gltf.cameras; // Array<THREE.Camera>
+	gltf.asset;
+  });  
+  //renderer.render(scene,camera);
+  //animacao();
+//}
+
+//function Bola(){
+gltfLoader.load('/assets/cheap_soccer_ball/scene.gltf', function(gltf){
+  var bola = gltf.scene.children[0];
+  bola.position.set(-10,1.7,0);
+  bola.scale.set(0.005,0.005,0.005);
+  scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
+  gltf.scene.receiveShadow =true;
+  gltf.animations; // Array<THREE.AnimationClip>
+	gltf.scene; // THREE.Group
+	gltf.scenes; // Array<THREE.Group>
+	gltf.cameras; // Array<THREE.Camera>
+	gltf.asset;
+});
+//}
+}
 function animacao() {
   renderer.render(scene,camera);
+
+  
   requestAnimationFrame(animacao);
   //controlador.update();
   
   
 }
-
+/*
 CriarGrama();
 CriarCentro();
 
@@ -224,6 +353,10 @@ Arvore2();
 Banco1();
 Banco2();
 Poste();
+Doguinho();
+Bola();
+*/
+init();
 animacao();
 
   </script>
