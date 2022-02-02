@@ -1,0 +1,502 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 256,
+      "max": [
+        23.920669555664062,
+        2.9344871044158936,
+        3.616626501083374
+      ],
+      "min": [
+        -5.9728727340698242,
+        -2.8166451454162598,
+        -3.6166274547576904
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 3072,
+      "componentType": 5126,
+      "count": 256,
+      "max": [
+        0.99935877323150635,
+        -0.035807270556688309,
+        0.99935871362686157
+      ],
+      "min": [
+        -0.99935877323150635,
+        -0.59645998477935791,
+        -0.99935871362686157
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 256,
+      "max": [
+        1,
+        0.99747896194458008,
+        0.9997718334197998,
+        1
+      ],
+      "min": [
+        -1,
+        -0.99747896194458008,
+        -0.94210457801818848,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 256,
+      "max": [
+        0.82333779335021973,
+        0.9902653694152832
+      ],
+      "min": [
+        0.65777754783630371,
+        0.82470506429672241
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 1344,
+      "max": [
+        255
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 6144,
+      "componentType": 5126,
+      "count": 17471,
+      "max": [
+        13.810379028320312,
+        22.849220275878906,
+        4.6238360404968262
+      ],
+      "min": [
+        -17.534137725830078,
+        -22.641159057617188,
+        -4.6597156524658203
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 215796,
+      "componentType": 5126,
+      "count": 17471,
+      "max": [
+        0.99999964237213135,
+        1,
+        1
+      ],
+      "min": [
+        -0.99999958276748657,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 4096,
+      "componentType": 5126,
+      "count": 17471,
+      "max": [
+        1,
+        0.99722820520401001,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -0.99999105930328369,
+        -1,
+        -1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2048,
+      "componentType": 5126,
+      "count": 17471,
+      "max": [
+        0.99949997663497925,
+        0.99584269523620605
+      ],
+      "min": [
+        0.00050000002374872565,
+        0.00050000002374872565
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 5376,
+      "componentType": 5125,
+      "count": 67620,
+      "max": [
+        17470
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "thatguyjay (https://sketchfab.com/thatguyjay)",
+      "license": "CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)",
+      "source": "https://sketchfab.com/models/2b6c56b1c93e4047998c0cccd3350f3f",
+      "title": "Lamp Post"
+    },
+    "generator": "Sketchfab-3.20.5",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 275856,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 141816,
+      "byteOffset": 275856,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 425448,
+      "byteOffset": 417672,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 283632,
+      "byteOffset": 843120,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1126752,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Metal_M_baseColor.png"
+    },
+    {
+      "uri": "textures/Metal_M_normal.png"
+    },
+    {
+      "uri": "textures/Metal_M_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/Material_48_emissive.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        1,
+        1,
+        1
+      ],
+      "emissiveTexture": {
+        "index": 3,
+        "texCoord": 0
+      },
+      "name": "Material_48",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.30742423320000001
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Metal_M",
+      "normalTexture": {
+        "index": 1,
+        "scale": 1,
+        "texCoord": 0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 0,
+          "texCoord": 0
+        },
+        "metallicFactor": 1,
+        "metallicRoughnessTexture": {
+          "index": 2,
+          "texCoord": 0
+        },
+        "roughnessFactor": 1
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Inners_Material #48_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Post_Metal_M_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TANGENT": 7,
+            "TEXCOORD_0": 8
+          },
+          "indices": 9,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "9420f9b9e0b54b77ba60d1412703b055.fbx"
+    },
+    {
+      "children": [
+        4,
+        7
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "matrix": [
+        0.97254729270935059,
+        0,
+        0,
+        0,
+        0,
+        0.99999999999998668,
+        1.629206882736149e-07,
+        0,
+        0,
+        -1.5844807430684821e-07,
+        0.9725472927093376,
+        0,
+        -11.069454193115234,
+        79.049972534179688,
+        2.9858201742172241e-06,
+        1
+      ],
+      "name": "Inners"
+    },
+    {
+      "children": [
+        6
+      ],
+      "matrix": [
+        1,
+        0,
+        -0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        2.3562479019165039,
+        -0.058929443359375,
+        4.7683738557680044e-07,
+        1
+      ],
+      "name": ""
+    },
+    {
+      "mesh": 0,
+      "name": "Inners_Material #48_0"
+    },
+    {
+      "children": [
+        8
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0.9999999403953419,
+        1.6292067079122444e-07,
+        0,
+        0,
+        -1.6292067079122444e-07,
+        0.9999999403953419,
+        0,
+        0,
+        50.072048187255859,
+        7.0817768573760986e-06,
+        1
+      ],
+      "name": "Post"
+    },
+    {
+      "children": [
+        9
+      ],
+      "matrix": [
+        1,
+        0,
+        -0,
+        0,
+        0,
+        2.0495655536651611,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1.825413703918457,
+        -3.7212796211242676,
+        -5.4240226745605469e-06,
+        1
+      ],
+      "name": ""
+    },
+    {
+      "mesh": 1,
+      "name": "Post_Metal_M_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    }
+  ]
+}
+
