@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mirante do Rio-UFPA</title>
+    <title>Praça js</title>
     <style>
       html, body {
          margin: 0;
@@ -15,12 +15,57 @@
   <script src="../js/three.js"></script>
   <script type="module">
 import {OrbitControls} from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/GLTFLoader.js";
+import { OBJLoader } from "https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/loaders/OBJLoader.js";
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
 
+const gltfloader = new GLTFLoader();
+
+const objLoader = new OBJLoader();
+
+gltfloader.load('../assets/giant_low_poly_tree/scene.gltf',
+ function (gltf) {
+  const root = gltf.scene;
+  root.traverse(function(model) {
+            if(model.isMesh){
+                model.castShadow = true;
+                model.receiveShadow = true;
+            }
+        })
+
+        root.position.set(-0.9,1.6,2.7)
+        star = root
+
+        scene.add( root );
+
+    },
+    // called while loading is progressing
+    function ( xhr ) {
+
+        console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+    },
+    // called when loading has errors
+    function ( error ) {
+
+        console.log( 'An error happened' );
+
+    }
+);
+
+
+/*
+function Tree2(){
+  objLoader.load('../assets/Tree low.obj',(root) => {
+    scene.add(root);
+  });
+	// called when resource is loaded
+// 
+}*/
 renderer.shadowMap.enabled = true;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -28,8 +73,8 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 function CriarPiso(){
-  var g = new THREE.PlaneGeometry(40,40);
-  var t = loader.load('../assets/pisoMirante.jpg');
+  var g = new THREE.PlaneGeometry(50,50);
+  var t = loader.load('../assets/grama.jpg');
   t.wrapS = THREE.RepeatWrapping;
   t.wrapT = THREE.RepeatWrapping;
   t.magFilter = THREE.NearestFilter;
@@ -43,23 +88,24 @@ function CriarPiso(){
   p.position.y = 0;
   p.receiveShadow = true;
 }
-function CriarGramado(){
-  var g = new THREE.PlaneGeometry(75,75);
-  var t = loader.load('../assets/grama.jpg');
-  t.wrapS = THREE.RepeatWrapping;
-  t.wrapT = THREE.RepeatWrapping;
-  t.magFilter = THREE.NearestFilter;
-  t.repeat.set(12,12);
+function CriarPista(){
+  var geometria = new THREE.CircleGeometry(10,128);
+  //var t = loader.load('../assets/street+asphalt-1024x1024.png');
+  //t.wrapS = THREE.RepeatWrapping;
+  //t.wrapT = THREE.RepeatWrapping;
+  //t.magFilter = THREE.NearestFilter;
+  //t.repeat.set(12,12);
   
-  var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
-  var p = new THREE.Mesh(g, ma);
-  p.rotation.x = Math.PI * -.5;
-  scene.add(p);
+  var material = new THREE.MeshToonMaterial({color: 0x9E5020});
+  var pista = new THREE.Mesh(geometria, material);
+  pista.rotation.x = Math.PI * -.5;
+  scene.add(pista);
   
-  p.position.y = -1;
-  p.receiveShadow = true;
+  pista.position.y = 1;
+  pista.receiveShadow = true;
 }
 const controlador = new OrbitControls(camera, renderer.domElement);
+controlador.enableDamping = true
 const loader = new THREE.TextureLoader();
 
 // Cubo central do Prédio
@@ -68,7 +114,7 @@ var material = new THREE.MeshPhongMaterial({color: 0xFFFFFF});
 
 var cubo = new THREE.Mesh(geometria, material);
 cubo.receiveShadow = true;
-scene.add(cubo);
+//scene.add(cubo);
 
 cubo.position.y = 25;
 camera.position.x = 30;
@@ -78,10 +124,17 @@ camera.position.y = 100;
 
 
 
-function animacao(){
-  requestAnimationFrame(animacao);
+const animacao = () => 
+{
+  if(star){
+        star.rotateY(0.0174533)
+    }
   
+
+  controlador.update();
   renderer.render(scene,camera);
+  
+  window.requestAnimationFrame(animacao);
 }
 
 //var light = new THREE.AmbientLight(new THREE.Color(0xFFFFFF), 1);
@@ -109,8 +162,10 @@ scene.add(ajudante);
 var ajudante2 = new THREE.CameraHelper(light.shadow.camera);
 scene.add(ajudante2);
 
-CriarGramado();
+CriarPista();
 CriarPiso();
+//Arvore();
+//Tree2();
 animacao();
 
 
