@@ -141,13 +141,13 @@ scene.add( axesHelper );
 // Grama
 //function CriarGrama(){
   var g = new THREE.PlaneGeometry(80,80);
-  var t = textureLoader.load('../assets/grama.jpg');
+  var t = textureLoader.load('../assets/Grass_Cartoon.jpg');
   t.wrapS = THREE.RepeatWrapping;
   t.wrapT = THREE.RepeatWrapping;
   t.magFilter = THREE.NearestFilter;
   t.repeat.set(12,12);
   
-  var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
+  var ma = new THREE.MeshStandardMaterial({map: t, side: THREE.DoubleSide});
   var p = new THREE.Mesh(g, ma);
   p.rotation.x = Math.PI * -.5;
   scene.add(p);
@@ -166,7 +166,7 @@ scene.add( axesHelper );
   //t.magFilter = THREE.NearestFilter;
   //t.repeat.set(12,12);
   
-  var material = new THREE.MeshToonMaterial({color: 0x422008});
+  var material = new THREE.MeshStandardMaterial({color: 0x422008});
   var pista = new THREE.Mesh(geometria, material);
   pista.rotation.x = Math.PI * -.5;
   scene.add(pista);
@@ -220,6 +220,27 @@ scene.add( axesHelper );
   //renderer.render(scene,camera);
   //animacao();
 });
+//function Arvore33(){
+  gltfLoader.load('/assets/lowpoly_tree/scene.gltf', function(gltf){
+  var tree = gltf.scene.children[0];
+  tree.position.set(20,0.1,-20);
+  tree.scale.set(8,8,8);
+  scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
+  gltf.animations; // Array<THREE.AnimationClip>
+	gltf.scene; // THREE.Group
+	gltf.scenes; // Array<THREE.Group>
+	gltf.cameras; // Array<THREE.Camera>
+	gltf.asset;
+  //renderer.render(scene,camera);
+  //animacao();
+});
+
 //}
 //function Banco1(){
   gltfLoader.load('/assets/classic_park_bench_low_poly/scene.gltf', function(gltf){
