@@ -19,7 +19,7 @@
 // função de inicialização
 // Cena
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x2b2a24);
+scene.background = new THREE.Color('lightblue');
 
 // Camera
 //const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -29,7 +29,8 @@ camera.position.x = 50;
 camera.position.y = 65;
 camera.position.z = 50;
 
-
+// Clock 
+var clock = new THREE.Clock();
 
 
 // Loader de Textura
@@ -139,14 +140,14 @@ scene.add( axesHelper );
 //function init(){
 // Grama
 //function CriarGrama(){
-  var g = new THREE.PlaneGeometry(50,50);
-  var t = textureLoader.load('../assets/grama.jpg');
+  var g = new THREE.PlaneGeometry(80,80);
+  var t = textureLoader.load('../assets/Grass_Cartoon.jpg');
   t.wrapS = THREE.RepeatWrapping;
   t.wrapT = THREE.RepeatWrapping;
   t.magFilter = THREE.NearestFilter;
   t.repeat.set(12,12);
   
-  var ma = new THREE.MeshPhongMaterial({map: t, side: THREE.DoubleSide});
+  var ma = new THREE.MeshStandardMaterial({map: t, side: THREE.DoubleSide});
   var p = new THREE.Mesh(g, ma);
   p.rotation.x = Math.PI * -.5;
   scene.add(p);
@@ -165,7 +166,7 @@ scene.add( axesHelper );
   //t.magFilter = THREE.NearestFilter;
   //t.repeat.set(12,12);
   
-  var material = new THREE.MeshToonMaterial({color: 0x422008});
+  var material = new THREE.MeshStandardMaterial({color: 0x422008});
   var pista = new THREE.Mesh(geometria, material);
   pista.rotation.x = Math.PI * -.5;
   scene.add(pista);
@@ -180,7 +181,7 @@ scene.add( axesHelper );
 //function Arvore1(){
   gltfLoader.load('/assets/giant_low_poly_tree/scene.gltf', function(gltf){
   var tree = gltf.scene.children[0];
-  tree.position.set(20,0.1,20);
+  tree.position.set(20,0.1,15);
   tree.scale.set(0.5,0.5,0.5);
   scene.add(gltf.scene);
   gltf.scene.traverse((obj) => {
@@ -202,7 +203,7 @@ scene.add( axesHelper );
 //function Arvore2(){
   gltfLoader.load('/assets/giant_low_poly_tree/scene.gltf', function(gltf){
   var tree = gltf.scene.children[0];
-  tree.position.set(-10,0.1,-20);
+  tree.position.set(-10,0.1,-15);
   tree.scale.set(0.5,0.5,0.5);
   scene.add(gltf.scene);
   gltf.scene.traverse((obj) => {
@@ -219,6 +220,27 @@ scene.add( axesHelper );
   //renderer.render(scene,camera);
   //animacao();
 });
+//function Arvore33(){
+  gltfLoader.load('/assets/lowpoly_tree/scene.gltf', function(gltf){
+  var tree = gltf.scene.children[0];
+  tree.position.set(20,0.1,-20);
+  tree.scale.set(8,8,8);
+  scene.add(gltf.scene);
+  gltf.scene.traverse((obj) => {
+      if (obj.castShadow !== undefined) {
+        obj.castShadow = true;
+        obj.receiveShadow = true;
+      }
+    });
+  gltf.animations; // Array<THREE.AnimationClip>
+	gltf.scene; // THREE.Group
+	gltf.scenes; // Array<THREE.Group>
+	gltf.cameras; // Array<THREE.Camera>
+	gltf.asset;
+  //renderer.render(scene,camera);
+  //animacao();
+});
+
 //}
 //function Banco1(){
   gltfLoader.load('/assets/classic_park_bench_low_poly/scene.gltf', function(gltf){
@@ -271,7 +293,7 @@ scene.add( axesHelper );
   tree.position.set(0,0,0);
   tree.scale.set(0.2,0.2,0.2);
   scene.add(gltf.scene);
-  /*gltf.scene.traverse((obj) => {
+  /*gltf.scene.traverse((obj) => {          // Lampada sem sombra
       if (obj.castShadow !== undefined) {
         obj.castShadow = true;
         obj.receiveShadow = true;
@@ -286,8 +308,9 @@ scene.add( axesHelper );
   //animacao();
 });
 //}
-// Load de Arvore 3d
+
 //function Doguinho(){
+  var dogmixer; // Variável global para ser usado no loop da animação
   gltfLoader.load('/assets/playful_dog/scene.gltf', function(gltf){
     if ( gltf.isMesh ) {
 
@@ -295,16 +318,23 @@ gltf.castShadow = true;
 gltf.receiveShadow = true;
 
 }
+
   var dog = gltf.scene.children[0];
   dog.position.set(10,0.1,0);
   dog.scale.set(5,5,5);
   scene.add(gltf.scene);
+  var dogModel = gltf.scene; // Instanciando a cena do objeto
+  var dogAnimations = gltf.animations; // Instanciando a animação do objeto
   gltf.scene.traverse((obj) => {
       if (obj.castShadow !== undefined) {
         obj.castShadow = true;
         obj.receiveShadow = true;
       }
     });
+    dogmixer = new THREE.AnimationMixer( dogModel );
+
+    var action = dogmixer.clipAction( dogAnimations[ 0 ] ); // access first animation clip
+    action.play();
   gltf.receiveShadow =true;
   gltf.castShadow =true;
   gltf.animations; // Array<THREE.AnimationClip>
@@ -316,6 +346,7 @@ gltf.receiveShadow = true;
   //renderer.render(scene,camera);
   //animacao();
 //}
+/*
 function dumpObject(obj, lines = [], isLast = true, prefix = '') {
   const localPrefix = isLast ? '└─' : '├─';
   lines.push(`${prefix}${prefix ? localPrefix : ''}${obj.name || '*no-name*'} [${obj.type}]`);
@@ -327,6 +358,7 @@ function dumpObject(obj, lines = [], isLast = true, prefix = '') {
   });
   return lines;
 }
+*/
 //function Bola(){
 geometria = new THREE.SphereGeometry(1,25,25);
 material = new THREE.MeshPhongMaterial({map: textureLoader.load('../assets/voleytexture.jpg')});
@@ -362,6 +394,8 @@ function animacao() {
   requestAnimationFrame(animacao);
   esfera.rotation.y +=0.2;
   esfera.rotation.x +=0.1;
+  var delta = clock.getDelta(); // clock is an instance of THREE.Clock
+  if ( dogmixer ) dogmixer.update( delta );
   renderer.render(scene,camera);
   
   
